@@ -53,7 +53,26 @@ function checkWinner(){
             someoneHasWon = true;
         }
     }
-    if(someoneHasWon === true){
-        console.log("Someone has won!");
+    let diagonalArray1 = [];
+    let diagonalArray2 = []
+    let diagonalArray = [diagonalArray1, diagonalArray2];
+    let arrayIndex1 = 0;
+    let arrayIndex2 = 2;
+        
+    for (let arrays of gameArray){
+        diagonalArray1.push(arrays[arrayIndex1])
+        arrayIndex1++;
     }
+    for (let arrays of gameArray){
+        diagonalArray2.push(arrays[arrayIndex2])
+        arrayIndex2--;}
+    for (arrays of diagonalArray){
+        if (arrays.join("") === "ooo" || arrays.join("") === "xxx"){
+            someoneHasWon = true;
+        }
+    }
+    if(someoneHasWon === true){
+            console.log("Someone has won!");
+            }
 }
+
