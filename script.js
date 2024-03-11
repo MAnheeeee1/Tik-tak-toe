@@ -1,3 +1,20 @@
+const gameSquares = document.querySelectorAll('.square');
+const s = document.querySelector(".square");
+
+for (const squares of gameSquares){
+    squares.addEventListener("click", ()=>{
+        x_cordinate = squares.dataset.x;
+        y_cordinate = squares.dataset.y;
+        alert(x_cordinate + y_cordinate)
+    })
+}
+
+
+
+
+
+
+//Game mechanic
 let gameBoard = (function creatGameBoard(){
     return {row1 : [" ", " ", " "],
             row2 : [" ", " ", " "],

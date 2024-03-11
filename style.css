@@ -1,0 +1,23 @@
+body{
+    margin: 0;
+    padding: 0;
+    display: grid;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+.game-area{
+    display: grid;
+    grid-template-columns:repeat(3, 200px);
+    grid-template-rows: repeat(3, 200px);
+    gap: 10px;
+    background-color: black;
+}
+.square{
+    background-color: red;
+    color: black;
+    font-size: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
