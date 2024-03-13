@@ -1,18 +1,8 @@
-const gameSquares = document.querySelectorAll('.square');
-const s = document.querySelector(".square");
-
-for (const squares of gameSquares){
-    squares.addEventListener("click", ()=>{
-        x_cordinate = squares.dataset.x;
-        y_cordinate = squares.dataset.y;
-        alert(x_cordinate + y_cordinate)
-    })
-}
 
 
-
-
-
+let currentPlayer = "1";
+let game1 = creatGame();
+game1.startGame();
 
 //Game mechanic
 let gameBoard = (function creatGameBoard(){
@@ -21,7 +11,52 @@ let gameBoard = (function creatGameBoard(){
             row3 : [" ", " ", " "],};
 })(); 
 
-function createPlayer(name){
+function creatGame(){
+    const gameSquares = document.querySelectorAll('.square');
+    const display = document.querySelector("#display");
+
+    function startGame(){
+        let gameOver = false;
+        let winner;
+        player1Name = prompt("Enter the name of player 1");
+        let player1 = createPlayer(player1Name, "1"); 
+        player2Name = prompt("Enter the name of player 1");
+        let player2 = createPlayer(player2Name, "2");
+        display.innerHTML = `${player1.name} turns` 
+
+        for (const squares of gameSquares){
+            squares.addEventListener("click", ()=>{
+                x_cordinate = parseInt(squares.dataset.x);
+                y_cordinate = parseInt(squares.dataset.y);
+                alert(typeof(x_cordinate))
+                if (currentPlayer === "1"){
+                    squares.innerHTML = "o";
+                    player1.MakeMove(x_cordinate, y_cordinate, "1");
+                    currentPlayer = "2";
+                    display.innerHTML = `${player2.name} turns`;
+                    if (checkWinner()){
+                        winner = player1;
+                        display.innerHTML = `${player1.name} IS THE WINNER!`
+                    }
+                }
+                else if (currentPlayer === "2"){
+                    squares.innerHTML = "x";
+                    player2.MakeMove(x_cordinate, y_cordinate, "2");
+                    currentPlayer = "1"
+                    display.innerHTML = `${player1.name} turns`;
+                    if (checkWinner()){
+                        winner = player2;
+                        display.innerHTML = `${player2.name} IS THE WINNER!`
+                    }
+                }
+    
+            })
+        }
+    }
+    return {startGame}
+}
+function createPlayer(name, playerIds){
+    let playerId = playerIds;
     let MakeMove = (x, y, player)=>{
         let playerPeice;
         if (player === "2"){
@@ -42,11 +77,10 @@ function createPlayer(name){
             gameBoard.row3[x_cordinate - 1] = playerPeice;
         }
         else{
-            console.log("The spot its ocupied");
+            alert("The spot its ocupied");
         }
-        checkWinner();
     }
-    return {name, MakeMove};
+    return {name, playerId, MakeMove};
 }
 
 function checkWinner(){
@@ -90,6 +124,7 @@ function checkWinner(){
     }
     if(someoneHasWon === true){
             console.log("Someone has won!");
+            return true;
             }
 }
 
