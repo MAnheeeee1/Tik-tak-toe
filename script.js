@@ -1,8 +1,18 @@
-
-
+const startButton = document.querySelector("#startGame");
+const resetButton = document.querySelector("#resetButton");
+let currentGame;
 let currentPlayer = "1";
-let game1 = creatGame();
-game1.startGame();
+
+startButton.onclick = function (){
+    let game = creatGame();
+    currentGame = game
+    game.startGame();
+}
+resetButton.onclick = function (){
+    currentGame.resetGame();
+}
+
+
 
 //Game mechanic
 let gameBoard = (function creatGameBoard(){
@@ -14,13 +24,14 @@ let gameBoard = (function creatGameBoard(){
 function creatGame(){
     const gameSquares = document.querySelectorAll('.square');
     const display = document.querySelector("#display");
-
+    let gameArrays = [gameBoard.row1, gameBoard.row2, gameBoard.row3];
     function startGame(){
         let gameOver = false;
         let winner;
+        let placedPeices = 0;
         player1Name = prompt("Enter the name of player 1");
         let player1 = createPlayer(player1Name, "1"); 
-        player2Name = prompt("Enter the name of player 1");
+        player2Name = prompt("Enter the name of player 2");
         let player2 = createPlayer(player2Name, "2");
         display.innerHTML = `${player1.name} turns` 
 
@@ -28,32 +39,62 @@ function creatGame(){
             squares.addEventListener("click", ()=>{
                 x_cordinate = parseInt(squares.dataset.x);
                 y_cordinate = parseInt(squares.dataset.y);
-                alert(typeof(x_cordinate))
                 if (currentPlayer === "1"){
-                    squares.innerHTML = "o";
-                    player1.MakeMove(x_cordinate, y_cordinate, "1");
-                    currentPlayer = "2";
-                    display.innerHTML = `${player2.name} turns`;
-                    if (checkWinner()){
-                        winner = player1;
-                        display.innerHTML = `${player1.name} IS THE WINNER!`
+                    if(gameArrays[y_cordinate - 1][x_cordinate - 1] === " "){
+                        squares.innerHTML = "o";
+                        alert(placedPeices);
+                        placedPeices ++;
+                        player1.MakeMove(x_cordinate, y_cordinate, "1");
+                        currentPlayer = "2";
+                        display.innerHTML = `${player2.name} turns`;
+                        if (checkWinner() && placedPeices <= 8){
+                            winner = player1;
+                            display.innerHTML = `${player1.name} IS THE WINNER!`
+                        }
+                        else if(placedPeices > 8)
+                        {
+                            display.innerHTML = "Its a Draw!";
+                        }
                     }
+                    else{
+                        alert("That spot its occupied!");
+                    }
+
                 }
                 else if (currentPlayer === "2"){
-                    squares.innerHTML = "x";
-                    player2.MakeMove(x_cordinate, y_cordinate, "2");
-                    currentPlayer = "1"
-                    display.innerHTML = `${player1.name} turns`;
-                    if (checkWinner()){
-                        winner = player2;
-                        display.innerHTML = `${player2.name} IS THE WINNER!`
+                    if(gameArrays[y_cordinate - 1][x_cordinate - 1] === " "){
+                        squares.innerHTML = "x";
+                        alert(placedPeices);
+                        placedPeices++;
+                        player2.MakeMove(x_cordinate, y_cordinate, "2");
+                        currentPlayer = "1"
+                        display.innerHTML = `${player1.name} turns`;
+                        if (checkWinner() && placedPeices <= 8){
+                            winner = player2;
+                            display.innerHTML = `${player2.name} IS THE WINNER!`
+                        }
+                        else if (placedPeices > 8){
+                            display.innerHTML = "Its a Draw!";
+                        }
+                    }
+                    else{
+                        alert("That spot its occupied!");
                     }
                 }
-    
             })
         }
     }
-    return {startGame}
+    function resetGame(){
+        gameBoard.row1 = [" ", " ", " "];
+        gameBoard.row2 = [" ", " ", " "];
+        gameBoard.row3 = [" ", " ", " "];
+        currentPlayer = "1";
+        display.innerHTML = "Hello! Click the button below to start the game!";
+        for (let squares of gameSquares){
+            squares.innerHTML = "";
+        }
+    }
+    return {startGame, resetGame}
 }
 function createPlayer(name, playerIds){
     let playerId = playerIds;
